@@ -26,8 +26,13 @@ app.secret_key = "agro_ai_secure_p@ss_key_2024"
 
 # Simple file logger for Gemini status
 def log_gemini(msg):
-    with open("gemini_init.log", "a") as f:
-        f.write(f"{datetime.now()}: {msg}\n")
+    # Use /tmp/ for Vercel/Render serverless environments
+    log_file = "/tmp/gemini_init.log" if (os.environ.get('VERCEL') == '1' or os.environ.get('RENDER') == 'true') else "gemini_init.log"
+    try:
+        with open(log_file, "a") as f:
+            f.write(f"{datetime.now()}: {msg}\n")
+    except Exception as e:
+        print(f"Logging failed: {e}")
 
 
 # Configure Gemini AI
