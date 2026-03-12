@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div style="margin-bottom: 3rem; text-align: center; animation: slideIn 0.8s ease;">
+    <h1 style="font-size: 3rem; color: white; text-shadow: 0 4px 10px rgba(0,0,0,0.3); font-weight: 800;">Welcome Home,
+        {{ session.get('username') }}!</h1>
+    <p style="color: rgba(255,255,255,0.9); font-size: 1.2rem; font-weight: 500;">Precision Agriculture powered by AI
+        Vision.</p>
+</div>
+
+<!-- Hero Feature Section -->
+<div class="card"
+    style="margin-bottom: 3rem; padding: 0; overflow: hidden; border: none; display: flex; flex-direction: row; align-items: stretch; background: rgba(255,255,255,0.85);">
+    <div style="flex: 1; padding: 3rem; display: flex; flex-direction: column; justify-content: center;">
+        <h2 style="font-size: 2rem; color: var(--primary-dark); margin-bottom: 1rem;">Smart Disease Detection</h2>
+        <p style="color: var(--text-secondary); line-height: 1.8; margin-bottom: 2rem; font-size: 1.05rem;">
+            Our advanced AI models are trained on millions of agricultural data points to provide you with the most
+            accurate diagnosis for your crops. Scan any leaf to get instant remediation protocols.
+        </p>
+        <div style="display: flex; gap: 15px;">
+            <a href="{{ url_for('diagnose') }}" class="btn">Start AI Analysis</a>
+            <a href="{{ url_for('library') }}" class="btn"
+                style="background: white; color: var(--primary-color); border: 2px solid var(--primary-color); box-shadow: none;">View
+                Encyclopedia</a>
+        </div>
+    </div>
+    <div
+        style="flex: 1; background: url('../static/images/dashboard_feature.png') no-repeat center center; background-size: cover; min-height: 350px;">
+    </div>
+</div>
+
+<div class="grid">
+    <!-- Stat 1 -->
+    <div class="card stat-card" style="border-bottom: 5px solid var(--primary-color);">
+        <i class="fa-solid fa-camera-viewfinder"
+            style="font-size: 2.5rem; color: var(--primary-color); margin-bottom: 1rem; display: block;"></i>
+        <div class="stat-number">{{ total_scans }}</div>
+        <p style="font-weight: 600; color: var(--text-secondary);">Total Analyses</p>
+    </div>
+
+    <!-- Stat 2 -->
+    <div class="card stat-card" style="border-bottom: 5px solid #43a047;">
+        <i class="fa-solid fa-seedling"
+            style="font-size: 2.5rem; color: #43a047; margin-bottom: 1rem; display: block;"></i>
+        <div class="stat-number">{{ healthy_count }}</div>
+        <p style="font-weight: 600; color: var(--text-secondary);">Healthy Crops</p>
+    </div>
+
+    <!-- Stat 3 -->
+    <div class="card stat-card" style="border-bottom: 5px solid #e53935;">
+        <i class="fa-solid fa-bug-slash"
+            style="font-size: 2.5rem; color: #e53935; margin-bottom: 1rem; display: block;"></i>
+        <div class="stat-number">{{ diseased_count }}</div>
+        <p style="font-weight: 600; color: var(--text-secondary);">Diseased Identified</p>
+    </div>
+</div>
+
+<div class="card" style="margin-top: 3rem; overflow: hidden;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+        <h3 style="font-size: 1.5rem;"><i class="fa-solid fa-rectangle-list"></i> Recent Diagnostic Reports</h3>
+        <a href="{{ url_for('history') }}" class="btn">Full Archive</a>
+    </div>
+
+    <div style="overflow-x: auto;">
+        <table style="width: 100%; border-collapse: separate; border-spacing: 0 10px;">
+            <thead>
+                <tr
+                    style="text-align: left; color: var(--text-secondary); text-transform: uppercase; font-size: 0.8rem; letter-spacing: 1px;">
+                    <th style="padding: 1rem;">Date</th>
+                    <th style="padding: 1rem;">Result</th>
+                    <th style="padding: 1rem;">Confidence</th>
+                    <th style="padding: 1rem;">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for record in recent_diagnoses %}
+                <tr style="background: rgba(255,255,255,0.4); transition: var(--transition);">
+                    <td style="padding: 1rem; border-radius: 12px 0 0 12px;">{{ record[5]|string|truncate(16, True, '')
+                        }}</td>
+                    <td style="padding: 1rem;">
+                        <div style="font-weight: 700; color: var(--primary-dark);">{{ record[2].split('___')[0]|replace('_', ' ')|title }}</div>
+                        <div style="font-size: 0.85rem; font-weight: 600; color: {% if 'healthy' in record[2].lower() %}#43a047{% else %}#e53935{% endif %};">
+                            {{ record[2].split('___')[1]|replace('_', ' ')|title if '___' in record[2] else record[2] }}
+                        </div>
+                    </td>
+                    <td style="padding: 1rem;">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <div style="flex-grow: 1; height: 6px; background: #eee; border-radius: 3px; width: 60px;">
+                                <div
+                                    style="width: 100%; height: 100%; background: var(--primary-color); --scale: {{ record[3] / 100 }}; transform: scaleX(var(--scale)); transform-origin: left;">
+                                </div>
+
+
+
+                            </div>
+                            <span style="font-size: 0.85rem; font-weight: 600;">{{ record[3] }}%</span>
+                        </div>
+                    </td>
+                    <td style="padding: 1rem; border-radius: 0 12px 12px 0;">
+                        <a href="{{ url_for('diagnose') }}" style="color: var(--primary-color);"><i
+                                class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                    </td>
+                </tr>
+                {% endfor %}
+                {% if not recent_diagnoses %}
+                <tr>
+                    <td colspan="4" style="text-align: center; padding: 3rem; color: #999;">
+                        <i class="fa-solid fa-folder-open"
+                            style="font-size: 3rem; display: block; margin-bottom: 1rem; opacity: 0.3;"></i>
+                        No data yet. Let's run your first AI analysis!
+                    </td>
+                </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="grid" style="margin-top: 3rem;">
+    <div class="card"
+        style="background: linear-gradient(135deg, var(--primary-dark), var(--primary-color)); color: white;">
+        <h3 style="color: white;"><i class="fa-solid fa-microscope"></i> AI Vision Engine</h3>
+        <p style="margin: 1.5rem 0; opacity: 0.9;">Analyze high-res images for instant identification of leaf pathogens
+            and treatment protocols.</p>
+        <a href="{{ url_for('diagnose') }}" class="btn" style="background: white; color: var(--primary-color);">Scan New
+            Image</a>
+    </div>
+    <div class="card">
+        <h3><i class="fa-solid fa-satellite-dish"></i> Cloud Status</h3>
+        <div style="display: flex; align-items: center; gap: 12px; margin-top: 1.5rem;">
+            <div
+                style="width: 12px; height: 12px; background: #4caf50; border-radius: 50%; box-shadow: 0 0 10px #4caf50;">
+            </div>
+            <span>Predictive Engine: <strong style="color: #2e7d32;">Optimal</strong></span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 12px; margin-top: 1rem;">
+            <div
+                style="width: 12px; height: 12px; background: #4caf50; border-radius: 50%; box-shadow: 0 0 10px #4caf50;">
+            </div>
+            <span>Global Knowledge DB: <strong style="color: #2e7d32;">Synced</strong></span>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

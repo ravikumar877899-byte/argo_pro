@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    body {
+        background: url('../static/images/login_bg.png') no-repeat center center fixed !important;
+        background-size: cover !important;
+    }
+
+    .auth-container {
+        backdrop-filter: brightness(0.8);
+        min-height: calc(100vh - 100px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+</style>
+<div class="auth-container" style="animation: slideIn 0.8s ease;">
+    <div class="card auth-card" style="padding: 3rem;">
+        <i class="fa-solid fa-leaf-heart"
+            style="font-size: 4rem; color: var(--primary-color); margin-bottom: 2rem; display: block;"></i>
+        <h2 style="margin-bottom: 1rem; color: var(--primary-dark); font-size: 2rem;">AgroAI Professional</h2>
+        <p style="color: var(--text-secondary); margin-bottom: 3rem; font-size: 1.1rem;">Precision Agriculture Portal
+        </p>
+
+        <form action="{{ url_for('login') }}" method="POST">
+            <div class="form-group" style="text-align: left; margin-bottom: 2rem;">
+                <label style="color: var(--primary-dark); font-weight: 700; margin-bottom: 10px;">Operator
+                    Username</label>
+                <input type="text" id="username" name="username" placeholder="Authorized identity" required
+                    style="background: white; border: 2px solid var(--bg-color); font-size: 1.1rem;">
+            </div>
+            <div class="form-group" style="text-align: left; margin-bottom: 2rem;">
+                <label style="color: var(--primary-dark); font-weight: 700; margin-bottom: 10px;">Security Access
+                    Key</label>
+                <input type="password" id="password" name="password" placeholder="••••••••" required
+                    style="background: white; border: 2px solid var(--bg-color); font-size: 1.1rem;">
+            </div>
+            <button type="submit" class="btn"
+                style="width: 100%; padding: 1.2rem; font-size: 1.1rem; box-shadow: 0 10px 20px rgba(46,125,50,0.2);">
+                <i class="fa-solid fa-unlock-keyhole"></i> Initialize Connection
+            </button>
+        </form>
+
+        <div
+            style="margin-top: 3rem; padding: 1.5rem; background: rgba(0,0,0,0.02); border-radius: 15px; border: 1px dashed #ccc;">
+            <p style="font-size: 0.85rem; color: #888;">
+                <i class="fa-solid fa-circle-info"></i> Simulation Mode: Manual entry is enabled for testing. Any
+                credential will be authenticated.
+            </p>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

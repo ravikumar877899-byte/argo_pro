@@ -1,0 +1,258 @@
+:root {
+  --primary-color: #2e7d32;
+  /* Deep Earthy Green */
+  --secondary-color: #fdd835;
+  /* Golden Harvest */
+  --accent-color: #81c784;
+  --dark-bg: #121212;
+  --glass-bg: rgba(255, 255, 255, 0.1);
+  --glass-border: rgba(255, 255, 255, 0.2);
+  --text-light: #f5f5f5;
+  --text-muted: #b0bec5;
+  --success: #66bb6a;
+  --danger: #ef5350;
+
+  --sidebar-width: 260px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', 'Inter', sans-serif;
+}
+
+body {
+  background-color: var(--dark-bg);
+  color: var(--text-light);
+  min-height: 100vh;
+  display: flex;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  overflow-x: hidden;
+}
+
+/* Sidebar Styles */
+.sidebar {
+  width: var(--sidebar-width);
+  height: 100vh;
+  background: rgba(18, 18, 18, 0.7);
+  backdrop-filter: blur(15px);
+  border-right: 1px solid var(--glass-border);
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  padding-top: 2rem;
+  z-index: 100;
+  transition: all 0.3s ease;
+}
+
+.brand {
+  text-align: center;
+  padding: 0 1rem 2rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--secondary-color);
+  letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.brand i {
+  color: var(--primary-color);
+  font-size: 1.8rem;
+}
+
+.nav-links {
+  list-style: none;
+  flex-grow: 1;
+  padding: 0 1rem;
+}
+
+.nav-links li {
+  margin-bottom: 0.5rem;
+}
+
+.nav-links a {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 12px 20px;
+  color: var(--text-muted);
+  text-decoration: none;
+  border-radius: 12px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.nav-links a i {
+  font-size: 1.2rem;
+  width: 25px;
+  text-align: center;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+  background: var(--primary-color);
+  color: #fff;
+  box-shadow: 0 4px 15px rgba(46, 125, 50, 0.4);
+  transform: translateX(5px);
+}
+
+/* Main Content Area */
+.main-content {
+  margin-left: var(--sidebar-width);
+  flex-grow: 1;
+  padding: 2rem;
+  min-height: 100vh;
+  position: relative;
+  z-index: 1;
+  background: linear-gradient(135deg, rgba(18, 18, 18, 0.85) 0%, rgba(18, 18, 18, 0.7) 100%);
+  backdrop-filter: blur(8px);
+}
+
+/* Glassmorphism Cards */
+.glass-card {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  padding: 2rem;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+  margin-bottom: 2rem;
+  animation: fadeIn 0.8s ease-out;
+}
+
+h1,
+h2,
+h3 {
+  color: var(--text-light);
+  margin-bottom: 1rem;
+}
+
+.text-gradient {
+  background: linear-gradient(45deg, var(--secondary-color), var(--accent-color));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Buttons */
+.btn-primary {
+  background: var(--primary-color);
+  color: #fff;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 30px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  box-shadow: 0 4px 15px rgba(46, 125, 50, 0.3);
+}
+
+.btn-primary:hover {
+  background: #1b5e20;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(46, 125, 50, 0.5);
+}
+
+/* Form Styles */
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--text-muted);
+}
+
+.form-control {
+  width: 100%;
+  padding: 12px 15px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--glass-border);
+  border-radius: 10px;
+  color: var(--text-light);
+  font-size: 1rem;
+  transition: all 0.3s;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 10px rgba(46, 125, 50, 0.3);
+}
+
+/* Utilities */
+.info-success {
+  color: var(--success) !important;
+}
+
+.info-danger {
+  color: var(--danger) !important;
+}
+
+.flash-success {
+  border-left: 4px solid var(--success) !important;
+}
+
+.flash-success i {
+  color: var(--success) !important;
+}
+
+.flash-danger {
+  border-left: 4px solid var(--danger) !important;
+}
+
+.flash-danger i {
+  color: var(--danger) !important;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.05);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar {
+    transform: translateX(-100%);
+  }
+
+  .main-content {
+    margin-left: 0;
+  }
+
+  /* Burger menu would be needed here for production */
+}

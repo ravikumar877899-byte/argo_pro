@@ -1,0 +1,9 @@
+venv/
+__pycache__/
+*.pyc
+instance/
+.pytest_cache/
+static/uploads/*
+!static/uploads/.gitkeep
+history.db
+*.h5

@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div style="display: flex; flex-wrap: wrap; gap: 2rem;">
+    <!-- Contact Info Section -->
+    <div class="glass-card" style="flex: 1; min-width: 300px;">
+        <h2><i class="fa-solid fa-headset text-gradient"></i> Expert Agricultural Support</h2>
+        <p style="color: var(--text-muted); margin-bottom: 2rem; line-height: 1.6;">
+            Need a second opinion? Can't identify a rare disease? Reach out to our network of certified agronomists and
+            plant pathologists.
+        </p>
+
+        <div style="margin-bottom: 1.5rem; display: flex; align-items: center; gap: 15px;">
+            <div
+                style="width: 50px; height: 50px; background: rgba(46, 125, 50, 0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                <i class="fa-solid fa-envelope" style="color: var(--primary-color); font-size: 1.2rem;"></i>
+            </div>
+            <div>
+                <h4 style="margin: 0; color: var(--text-light);">Email Us</h4>
+                <p style="margin: 0; color: var(--text-muted); font-size: 0.9rem;">experts@agroai.com</p>
+            </div>
+        </div>
+
+        <div style="margin-bottom: 1.5rem; display: flex; align-items: center; gap: 15px;">
+            <div
+                style="width: 50px; height: 50px; background: rgba(46, 125, 50, 0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                <i class="fa-solid fa-phone" style="color: var(--primary-color); font-size: 1.2rem;"></i>
+            </div>
+            <div>
+                <h4 style="margin: 0; color: var(--text-light);">Call Toll-Free</h4>
+                <p style="margin: 0; color: var(--text-muted); font-size: 0.9rem;">+1 (800) FARMS-AI</p>
+            </div>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 15px;">
+            <div
+                style="width: 50px; height: 50px; background: rgba(46, 125, 50, 0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                <i class="fa-solid fa-location-dot" style="color: var(--primary-color); font-size: 1.2rem;"></i>
+            </div>
+            <div>
+                <h4 style="margin: 0; color: var(--text-light);">Headquarters</h4>
+                <p style="margin: 0; color: var(--text-muted); font-size: 0.9rem;">123 Innovation Agri-Park, Silicon
+                    Valley, CA</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Form Section -->
+    <div class="glass-card" style="flex: 1.5; min-width: 350px;">
+        <h3 style="margin-bottom: 1.5rem; border-bottom: 1px solid var(--glass-border); padding-bottom: 10px;">Send a
+            Message</h3>
+        <form action="{{ url_for('contact') }}" method="POST">
+            <div class="form-group">
+                <label for="name">Full Name</label>
+                <input type="text" id="name" name="name" class="form-control" required placeholder="John Doe">
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" class="form-control" required
+                    placeholder="john@example.com">
+            </div>
+
+            <div class="form-group">
+                <label for="subject">Subject / Issue</label>
+                <select id="subject" name="subject" class="form-control" style="background: #1e1e1e;">
+                    <option value="diagnosis_help">Need help with a diagnosis</option>
+                    <option value="treatment_advice">Treatment / Pesticide Advice</option>
+                    <option value="app_feedback">App Feedback</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="message">Detailed Message</label>
+                <textarea id="message" name="message" class="form-control" rows="5" required
+                    placeholder="Describe your plant's symptoms or your question here..."></textarea>
+            </div>
+
+            <button type="submit" class="btn-primary" style="width: 100%; justify-content: center;">
+                <i class="fa-solid fa-paper-plane"></i> Submit Inquiry
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}

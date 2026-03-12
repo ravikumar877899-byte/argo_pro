@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div style="margin-bottom: 2rem;">
+    <h1>Farmer Profile & System Settings</h1>
+    <p style="color: var(--text-secondary);">Manage your account preferences and agricultural system configuration.</p>
+</div>
+
+<div class="grid">
+    <!-- User Card -->
+    <div class="card" style="text-align: center;">
+        <div
+            style="width: 100px; height: 100px; background: var(--primary-color); border-radius: 50%; margin: 0 auto 1.5rem; display: flex; align-items: center; justify-content: center;">
+            <i class="fa-solid fa-user" style="font-size: 3rem; color: white;"></i>
+        </div>
+        <h2>{{ session.get('username') }}</h2>
+        <p style="color: #666; margin-top: 5px;">Lead Agricultural Analyst</p>
+        <div style="margin-top: 1.5rem; display: flex; justify-content: center; gap: 10px;">
+            <span
+                style="padding: 5px 12px; background: #e8f5e9; color: #2e7d32; border-radius: 15px; font-size: 0.8rem; font-weight: bold;">Verified
+                Farmer</span>
+            <span
+                style="padding: 5px 12px; background: #fff3e0; color: #ef6c00; border-radius: 15px; font-size: 0.8rem; font-weight: bold;">Pro
+                Plan</span>
+        </div>
+    </div>
+
+    <!-- Account Details -->
+    <div class="card">
+        <h3>System Details</h3>
+        <div style="margin-top: 1.5rem;">
+            <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #eee;">
+                <span>Username:</span>
+                <span style="font-weight: bold;">{{ session.get('username') }}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #eee;">
+                <span>Account Status:</span>
+                <span style="color: #4caf50; font-weight: bold;">Active</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #eee;">
+                <span>Model Version:</span>
+                <span>v2.4.1 (Stable)</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 10px 0;">
+                <span>Last Logged In:</span>
+                <span>Just Now</span>
+            </div>
+        </div>
+        <button class="btn" style="width: 100%; margin-top: 2rem; background: #607d8b;">Update Password</button>
+    </div>
+</div>
+
+<div class="card" style="margin-top: 2rem;">
+    <h3>Professional Preferences</h3>
+    <div class="grid" style="margin-top: 1.5rem;">
+        <div style="display: flex; align-items: center; gap: 15px;">
+            <input type="checkbox" checked style="width: 20px; height: 20px;">
+            <span>Receive automatic treatment updates via email</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 15px;">
+            <input type="checkbox" checked style="width: 20px; height: 20px;">
+            <span>Enable high-accuracy AI deep scan (Beta)</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 15px;">
+            <input type="checkbox" checked style="width: 20px; height: 20px;">
+            <span>Share anonymous data for community growth</span>
+        </div>
+    </div>
+</div>
+
+<div style="margin-top: 2rem; text-align: center;">
+    <a href="{{ url_for('logout') }}" class="btn" style="background: #c62828;">
+        <i class="fa-solid fa-power-off"></i> Terminate Session & Logout
+    </a>
+</div>
+{% endblock %}

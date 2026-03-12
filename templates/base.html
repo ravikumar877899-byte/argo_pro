@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}AgroAI Pro - Smart Crop Assistant{% endblock %}</title>
+    <meta name="description"
+        content="AgroAI Pro: Advanced AI-powered crop disease detection and treatment assistant. Identify plant diseases instantly with high accuracy.">
+    <meta name="keywords"
+        content="crop disease detection, AI agriculture, plant health assistant, smart farming, agro ai">
+    <meta name="author" content="AgroAI Team">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://agro-ai-pro.onrender.com/">
+    <meta property="og:title" content="AgroAI Pro - Smart Crop Assistant">
+    <meta property="og:description"
+        content="Identify crop diseases instantly with our advanced AI vision system. Get professional treatment protocols for over 30+ crop varieties.">
+    <meta property="og:image" content="{{ url_for('static', filename='img/og-image.jpg') }}">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://agro-ai-pro.onrender.com/">
+    <meta property="twitter:title" content="AgroAI Pro - Smart Crop Assistant">
+    <meta property="twitter:description" content="Identify crop diseases instantly with our advanced AI vision system.">
+    <meta property="twitter:image" content="{{ url_for('static', filename='img/og-image.jpg') }}">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom Professional CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+
+<body>
+
+    {% if session.get('logged_in') %}
+    <!-- Professional Glass Navigation Bar -->
+    <nav>
+        <a href="{{ url_for('dashboard') }}" class="logo">
+            <i class="fa-solid fa-leaf-heart"></i> AGRO<span>AI</span> PRO
+        </a>
+        <ul class="nav-links">
+            <li><a href="{{ url_for('dashboard') }}"><i class="fa-solid fa-house-chimney"></i> Home</a></li>
+            <li><a href="{{ url_for('diagnose') }}"><i class="fa-solid fa-wand-magic-sparkles"></i> Analyze</a></li>
+            <li><a href="{{ url_for('library') }}"><i class="fa-solid fa-library"></i> Library</a></li>
+            <li><a href="{{ url_for('treatment') }}"><i class="fa-solid fa-prescription-bottle-medical"></i> Cure</a>
+            </li>
+            <li><a href="{{ url_for('history') }}"><i class="fa-solid fa-file-invoice"></i> Reports</a></li>
+            <li><a href="{{ url_for('profile') }}"><i class="fa-solid fa-user-astronaut"></i> Me</a></li>
+            <li><a href="javascript:void(0)" onclick="toggleChat()"><i class="fa-solid fa-comments"></i> Chat AI</a>
+            </li>
+            <li><a href="{{ url_for('logout') }}" class="btn"
+                    style="padding: 0.5rem 1rem; background: #e53935; box-shadow: none;">
+                    <i class="fa-solid fa-power-off"></i></a></li>
+        </ul>
+    </nav>
+    {% endif %}
+
+
+    <div class="container">
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div class="flash {{ category }}">
+            {{ message }}
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </div>
+
+    {% if session.get('logged_in') %}
+    <!-- AI Chatbot UI -->
+    <div id="chatbot-container" style="position: fixed; bottom: 30px; right: 30px; z-index: 9999;">
+        <button id="chat-toggle" class="btn"
+            style="width: 60px; height: 60px; border-radius: 50%; padding: 0; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+            <i class="fa-solid fa-robot"></i>
+        </button>
+
+        <div id="chat-window" class="card"
+            style="position: absolute; bottom: 80px; right: 0; width: 350px; height: 500px; display: none; flex-direction: column; padding: 0; overflow: hidden; border: 1px solid var(--glass-border); animation: slideIn 0.3s ease;">
+            <div
+                style="background: var(--primary-color); color: white; padding: 1.2rem 1.5rem; display: flex; justify-content: space-between; align-items: center;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <i class="fa-solid fa-robot"></i>
+                    <strong style="font-size: 1.1rem;">AgroAI Assistant</strong>
+                </div>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <select id="chat-lang" onchange="changeLang()"
+                        style="background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.3); border-radius: 5px; padding: 2px 5px; font-size: 0.85rem; outline: none; cursor: pointer;">
+                        <option value="en" style="color: black;">English</option>
+                        <option value="ta" style="color: black;">தமிழ் (Tamil)</option>
+                    </select>
+                    <button onclick="toggleChat()"
+                        style="background: none; border: none; color: white; cursor: pointer; font-size: 1.2rem; padding: 0;">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div id="chat-messages"
+                style="flex: 1; padding: 1.5rem; overflow-y: auto; display: flex; flex-direction: column; gap: 1rem; background: rgba(255,255,255,0.95);">
+                <div
+                    style="align-self: flex-start; background: #e8f5e9; padding: 10px 15px; border-radius: 15px 15px 15px 0; max-width: 80%; font-size: 0.95rem; border: 1px solid #c8e6c9;">
+                    Hi! I'm your AI crop assistant. Ask me anything about plant diseases or treatments!
+                </div>
+            </div>
+
+            <div style="padding: 1rem; border-top: 1px solid #eee; background: white; display: flex; gap: 10px;">
+                <input type="text" id="chat-input" placeholder="Type a message..."
+                    style="flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 10px; outline: none;">
+                <button id="send-chat" class="btn" style="padding: 10px 15px; border-radius: 10px;">
+                    <i class="fa-solid fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/chat.js') }}"></script>
+    {% endif %}
+
+    <footer>
+        <p>&copy; 2024 AgroAI Professional Assistant. Empowering Sustainable Agriculture.</p>
+    </footer>
+
+</body>
+
+</html>

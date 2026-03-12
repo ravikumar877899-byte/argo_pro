@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /history
+Disallow: /profile
+Disallow: /logout
+
+Sitemap: https://agro-ai-pro.onrender.com/sitemap.xml

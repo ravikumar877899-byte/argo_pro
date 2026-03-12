@@ -1,0 +1,283 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="archive-header">
+    <div class="header-text">
+        <h1><i class="fa-solid fa-clock-rotate-left"></i> Diagnostic Archives</h1>
+        <p>A comprehensive history of your crop health intelligence.</p>
+    </div>
+    <button class="btn export-btn" onclick="window.print()">
+        <i class="fa-solid fa-file-export"></i> Export Intelligence
+    </button>
+</div>
+
+<div class="card history-card">
+    <div class="table-responsive">
+        <table class="history-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Specimen</th>
+                    <th>Classification</th>
+                    <th>Precision</th>
+                    <th>Timestamp</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for record in records %}
+                <tr class="history-row" data-accuracy="{{ record[3] }}">
+                    <td class="id-cell">#{{ record[0] }}</td>
+                    <td class="img-cell">
+                        <img src="{{ url_for('static', filename='uploads/' + record[1]) }}" alt="Specimen"
+                            class="specimen-thumb">
+                    </td>
+                    <td class="class-cell">
+                        <div class="crop-category">{{ record[2].split('___')[0]|replace('_', ' ')|title }}</div>
+                        <div
+                            class="disease-status {{ 'text-healthy' if 'healthy' in record[2].lower() else 'text-diseased' }}">
+                            {{ record[2].split('___')[1]|replace('_', ' ')|title if '___' in record[2] else record[2] }}
+                        </div>
+                    </td>
+                    <td class="precision-cell">
+                        <div class="precision-container">
+                            <span class="precision-text">{{ record[3] }}%</span>
+                            <div class="mini-progress">
+                                <div class="mini-bar"></div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="time-cell">
+                        {{ record[5]|string|truncate(16, True, '') }}
+                    </td>
+                    <td class="status-cell">
+                        <span class="verified-badge">
+                            <i class="fa-solid fa-shield-check"></i> VERIFIED
+                        </span>
+                    </td>
+                </tr>
+                {% endfor %}
+                {% if not records %}
+                <tr class="empty-row">
+                    <td colspan="6">
+                        <i class="fa-solid fa-database empty-icon"></i>
+                        <p>Intelligent records are currently empty. Run a scan to begin logging.</p>
+                    </td>
+                </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="grid monitoring-grid">
+    <div class="card stat-card alerts-card">
+        <i class="fa-solid fa-microchip stat-icon"></i>
+        <h3>Outbreak Alerts</h3>
+        <p>Zero severe pathogens detected across current specimen set.</p>
+    </div>
+    <div class="card stat-card capacity-card">
+        <i class="fa-solid fa-leaf stat-icon"></i>
+        <h3>Monitoring Capacity</h3>
+        <p>Currently tracking <strong>{{ records|length }}</strong> unique diagnostic IDs.</p>
+    </div>
+</div>
+
+<style>
+    .archive-header {
+        margin-bottom: 3rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+    }
+
+    .header-text h1 {
+        font-size: 2.5rem;
+        color: var(--primary-dark);
+    }
+
+    .header-text p {
+        color: var(--text-secondary);
+        font-size: 1.1rem;
+    }
+
+    .export-btn {
+        background: var(--primary-dark);
+    }
+
+    .history-card {
+        padding: 0;
+        overflow: hidden;
+    }
+
+    .table-responsive {
+        overflow-x: auto;
+    }
+
+    .history-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .history-table th {
+        padding: 1.5rem;
+        text-align: left;
+        background: rgba(0, 0, 0, 0.03);
+        color: var(--text-secondary);
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+    }
+
+    .history-row {
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        transition: background 0.3s;
+    }
+
+    .history-row:hover {
+        background: rgba(46, 125, 50, 0.05);
+    }
+
+    .id-cell {
+        padding: 1.2rem 1.5rem;
+        font-family: monospace;
+        font-weight: bold;
+        color: var(--primary-color);
+    }
+
+    .img-cell {
+        padding: 1.2rem 1.5rem;
+    }
+
+    .specimen-thumb {
+        width: 50px;
+        height: 50px;
+        border-radius: 12px;
+        object-fit: cover;
+        border: 2px solid white;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .class-cell {
+        padding: 1.2rem 1.5rem;
+    }
+
+    .crop-category {
+        font-weight: 700;
+        color: var(--primary-dark);
+    }
+
+    .disease-status {
+        font-size: 0.85rem;
+        font-weight: 600;
+    }
+
+    .precision-cell {
+        padding: 1.2rem 1.5rem;
+    }
+
+    .precision-container {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .precision-text {
+        font-weight: bold;
+    }
+
+    .mini-progress {
+        width: 50px;
+        height: 6px;
+        background: #eee;
+        border-radius: 3px;
+        overflow: hidden;
+    }
+
+    .mini-bar {
+        height: 100%;
+        background: var(--primary-color);
+        width: 0;
+        transition: width 0.6s ease;
+    }
+
+    .time-cell {
+        padding: 1.2rem 1.5rem;
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+    }
+
+    .status-cell {
+        padding: 1.2rem 1.5rem;
+    }
+
+    .verified-badge {
+        background: rgba(46, 125, 50, 0.1);
+        color: var(--primary-color);
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-weight: bold;
+        font-size: 0.75rem;
+    }
+
+    .empty-row {
+        text-align: center;
+        color: #999;
+    }
+
+    .empty-row td {
+        padding: 5rem;
+    }
+
+    .empty-icon {
+        font-size: 4rem;
+        opacity: 0.2;
+        display: block;
+        margin-bottom: 2rem;
+    }
+
+    .monitoring-grid {
+        margin-top: 3rem;
+    }
+
+    .stat-card {
+        text-align: center;
+    }
+
+    .alerts-card {
+        border-top: 5px solid #ffca28;
+    }
+
+    .capacity-card {
+        border-top: 5px solid var(--primary-light);
+    }
+
+    .stat-icon {
+        font-size: 2.5rem;
+        margin-bottom: 15px;
+    }
+
+    .stat-card h3 {
+        color: var(--primary-dark);
+    }
+
+    .stat-card p {
+        font-size: 1rem;
+        color: var(--text-secondary);
+        margin-top: 10px;
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const rows = document.querySelectorAll('.history-row');
+        rows.forEach(row => {
+            const accuracy = row.dataset.accuracy;
+            const bar = row.querySelector('.mini-bar');
+            if (bar && accuracy) {
+                bar.style.width = accuracy + '%';
+            }
+        });
+    });
+</script>
+{% endblock %}

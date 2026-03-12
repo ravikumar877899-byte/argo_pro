@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div style="margin-bottom: 3rem; text-align: center; animation: slideIn 0.8s ease;">
+    <h1 style="font-size: 2.5rem; color: var(--primary-dark);"><i class="fa-solid fa-book-sparkles"></i> Botanical
+        Encyclopedia</h1>
+    <p style="color: var(--text-secondary); font-size: 1.1rem;">Instant intelligence for crop pathology and organic
+        health management.</p>
+</div>
+
+<div class="card" style="margin-bottom: 3rem; border-radius: 50px; padding: 1rem 2rem;">
+    <div style="display: flex; gap: 20px; align-items: center;">
+        <i class="fa-solid fa-magnifying-glass" style="color: var(--primary-color); font-size: 1.2rem;"></i>
+        <input type="text" id="cropSearch" placeholder="Search by crop, disease name, or symptoms..."
+            style="border: none; background: transparent; width: 100%; font-size: 1.1rem; outline: none;"
+            onkeyup="searchCrops()">
+    </div>
+</div>
+
+<div id="encyclopediaContent" class="grid">
+    {% for crop, diseases in crop_library.items() %}
+    <div class="card crop-section" data-crop="{{ crop.lower() }}" style="display: flex; flex-direction: column;">
+        <div
+            style="display: flex; align-items: center; gap: 15px; margin-bottom: 2rem; border-bottom: 3px solid var(--bg-color); padding-bottom: 15px;">
+            <i class="fa-solid fa-seedling" style="color: var(--primary-color); font-size: 2rem;"></i>
+            <h2 style="text-transform: capitalize; font-size: 1.6rem; color: var(--primary-dark);">{{ crop }}</h2>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+            {% for item in diseases %}
+            <div class="disease-item" data-disease="{{ item.data.name.lower() }}"
+                data-type="{{ item.data.type.lower() }}" data-symptoms="{{ item.data.symptoms.lower() }}"
+                style="padding: 1.5rem; background: white; border-radius: 15px; --border-clr: {{ 'var(--primary-color)' if 'healthy' in item.id.lower() else '#ef5350' }}; border-left: 5px solid var(--border-clr); box-shadow: 0 4px 6px rgba(0,0,0,0.02);">
+
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <strong style="font-size: 1.2rem; color: var(--primary-dark);">{{ item.data.name }}</strong>
+                    <span style="font-size: 0.75rem; font-weight: 800; padding: 4px 10px; border-radius: 20px; 
+                               --bg-clr: {{ 'rgba(46,125,50,0.1)' if 'healthy' in item.id.lower() else 'rgba(239,83,80,0.1)' }};
+                               --text-clr: {{ 'var(--primary-color)' if 'healthy' in item.id.lower() else '#c62828' }};
+                               background: var(--bg-clr); 
+                               color: var(--text-clr);">
+                        {{ item.data.type | upper }}
+                    </span>
+                </div>
+
+                <p style="font-size: 0.9rem; color: #555; line-height: 1.6; margin-bottom: 1.5rem;">{{
+                    item.data.symptoms }}</p>
+
+                <div style="display: flex; gap: 12px;">
+                    <a href="{{ url_for('treatment') }}#{{ item.id.replace(' ', '_') }}" class="btn"
+                        style="padding: 8px 16px; font-size: 0.8rem; border-radius: 10px; box-shadow: none;">Protocol</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endfor %}
+
+    <div id="noResults" class="card"
+        style="display: none; width: 100%; grid-column: 1 / -1; text-align: center; padding: 5rem; border: 2px dashed #ccc; background: transparent;">
+        <i class="fa-solid fa-microscope" style="font-size: 4rem; color: #ccc; margin-bottom: 1.5rem;"></i>
+        <h3 style="color: #666; font-size: 1.5rem;">No biological matches identified</h3>
+        <p style="color: #999; margin-top: 10px;">Attempt searching by broad crop category or specific symptom
+            descriptions.</p>
+    </div>
+</div>
+
+<script>
+    function searchCrops() {
+        let input = document.getElementById('cropSearch').value.toLowerCase();
+        let sections = document.getElementsByClassName('crop-section');
+        let noResults = document.getElementById('noResults');
+        let totalVisibleInAll = 0;
+
+        for (let section of sections) {
+            let cropName = section.getAttribute('data-crop');
+            let diseases = section.getElementsByClassName('disease-item');
+            let hasVisibleDisease = false;
+
+            for (let disease of diseases) {
+                let diseaseName = disease.getAttribute('data-disease');
+                let diseaseType = disease.getAttribute('data-type');
+                let symptoms = disease.getAttribute('data-symptoms');
+
+                if (cropName.includes(input) ||
+                    diseaseName.includes(input) ||
+                    diseaseType.includes(input) ||
+                    symptoms.includes(input)) {
+                    disease.style.display = "";
+                    hasVisibleDisease = true;
+                    totalVisibleInAll++;
+                } else {
+                    disease.style.display = "none";
+                }
+            }
+
+            if (hasVisibleDisease) {
+                section.style.display = "";
+            } else {
+                section.style.display = "none";
+            }
+        }
+
+        noResults.style.display = (totalVisibleInAll === 0 && input !== "") ? "block" : "none";
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div style="margin-bottom: 2rem;">
+    <h1>Treatment Specialist Assistant</h1>
+    <p style="color: var(--text-secondary);">Direct clinical protocols for remediating active crop infections.</p>
+</div>
+
+{% for id, data in diseases.items() %}
+<div id="{{ id.replace(' ', '_') }}" class="card" style="margin-bottom: 2rem;">
+    <div
+        style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem; border-bottom: 2px solid #f1f8e9; padding-bottom: 15px;">
+        <div style="display: flex; align-items: center; gap: 15px;">
+            <div class="icon-box {% if 'healthy' in id.lower() %}bg-healthy{% else %}bg-diseased{% endif %}"
+                style="width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                <i class="fa-solid {% if 'healthy' in id.lower() %}fa-check text-healthy{% else %}fa-microscope text-diseased{% endif %}"
+                    style="font-size: 1.5rem;"></i>
+            </div>
+            <div>
+                <h2 style="font-size: 1.4rem;">{{ data.name }}</h2>
+                <span style="font-size: 0.8rem; font-weight: bold; color: #777; text-transform: uppercase;">{{ data.type
+                    }}</span>
+            </div>
+        </div>
+        <div style="text-align: right;">
+            <p style="font-size: 0.8rem; color: #999;">Reference ID</p>
+            <code style="font-size: 0.75rem; background: #eee; padding: 2px 5px; border-radius: 4px;">{{ id }}</code>
+        </div>
+    </div>
+
+    <div class="grid">
+        <div style="background: #fafafa; padding: 1.5rem; border-radius: 15px;">
+            <h4 style="margin-bottom: 10px; color: var(--primary-color);">Clinical Symptoms</h4>
+            <p style="font-size: 0.9rem; line-height: 1.6; color: #444;">{{ data.symptoms }}</p>
+        </div>
+
+        <div style="background: #fff; padding: 1.5rem; border-radius: 15px; border: 1px solid #eee;">
+            <h4 style="margin-bottom: 15px; color: var(--primary-color);">Treatment Protocol</h4>
+            <ul style="list-style: none;">
+                {% for treat in data.treatment %}
+                <li style="display: flex; gap: 12px; margin-bottom: 10px; font-size: 0.9rem;">
+                    <i class="fa-solid fa-square-check" style="color: #8bc34a; margin-top: 3px;"></i>
+                    <span>{{ treat }}</span>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <div style="margin-top: 2rem; display: flex; gap: 10px;">
+        <a href="{{ url_for('diagnose') }}" class="btn" style="padding: 8px 15px; font-size: 0.85rem;">
+            <i class="fa-solid fa-camera"></i> Run Scan
+        </a>
+        <button onclick="window.print()" class="btn"
+            style="padding: 8px 15px; font-size: 0.85rem; background: white; color: #666; border: 1px solid #ddd;">
+            Save PDF
+        </button>
+    </div>
+</div>
+{% endfor %}
+{% endblock %}
